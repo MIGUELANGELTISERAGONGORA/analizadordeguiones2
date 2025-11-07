@@ -1,15 +1,12 @@
 import { GoogleGenAI } from "@google/genai";
 
-export const analyzeScriptWithGemini = async (script: string, theoryName: string): Promise<string> => {
-    const API_KEY = process.env.API_KEY;
-
-    if (!API_KEY) {
-        // Return a specific error string instead of throwing, to prevent crashing the app.
-        return "Error de configuración: La clave de API (API_KEY) no está configurada en el entorno de despliegue. La funcionalidad de análisis por IA está desactivada.";
+export const analyzeScriptWithGemini = async (script: string, theoryName: string, apiKey: string): Promise<string> => {
+    if (!apiKey) {
+        return "Error: La clave de API no ha sido proporcionada. Por favor, introduce tu clave para usar el analizador.";
     }
 
     try {
-        const ai = new GoogleGenAI({ apiKey: API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const prompt = `Actúa como el Profesor Miguelangel Tisera, un analista experto en guiones de cine y películas de marca. Comienza tu análisis con un saludo cordial. Analiza el siguiente guion basándote en la teoría de ${theoryName}. Identifica los puntos clave de la teoría que están presentes o ausentes y proporciona recomendaciones específicas y accionables para mejorar el guion. Estructura tu respuesta con un encabezado principal, una sección de "Análisis" y una sección de "Recomendaciones". El guion es: \n\n${script}`;
         
         const response = await ai.models.generateContent({
@@ -24,6 +21,10 @@ export const analyzeScriptWithGemini = async (script: string, theoryName: string
     } catch (error) {
         console.error("Error calling Gemini API:", error);
         if (error instanceof Error) {
+            // Check for common API key errors
+            if (error.message.includes('API key not valid')) {
+                return "Error: La clave de API proporcionada no es válida. Por favor, verifica e introdúcela de nuevo.";
+            }
             return `Error al conectar con la IA: ${error.message}. Por favor, inténtalo de nuevo.`;
         }
         return "Ocurrió un error desconocido al contactar con la IA.";

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import type { Chart } from 'chart.js';
 
@@ -7,6 +6,11 @@ const SynthesisChart: React.FC = () => {
     const chartRef = useRef<Chart | null>(null);
 
     useEffect(() => {
+        if (typeof (window as any).Chart === 'undefined') {
+            console.error('Chart.js library has not loaded yet.');
+            return; // Exit if Chart.js is not available
+        }
+
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext('2d');
             if (ctx) {
