@@ -7,13 +7,13 @@ export const analyzeScriptWithGemini = async (script: string, theoryName: string
 
     try {
         const ai = new GoogleGenAI({ apiKey });
-        const prompt = `Actúa como el Profesor Miguelangel Tisera, un analista experto en guiones de cine y películas de marca. Comienza tu análisis con un saludo cordial. Analiza el siguiente guion basándote en la teoría de ${theoryName}. Identifica los puntos clave de la teoría que están presentes o ausentes y proporciona recomendaciones específicas y accionables para mejorar el guion. Estructura tu respuesta con un encabezado principal, una sección de "Análisis" y una sección de "Recomendaciones". El guion es: \n\n${script}`;
+        const prompt = `Por favor, comienza con un saludo cordial. Luego, analiza el siguiente guion basándote en la teoría de ${theoryName}. Estructura tu respuesta con los subtítulos 'Análisis' y 'Recomendaciones'. El guion es:\n\n${script}`;
         
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: [{ parts: [{ text: prompt }] }],
             config: {
-                systemInstruction: "Eres el Profesor Miguelangel Tisera, un consultor de guion experto en películas de marca. Tu tono es académico pero accesible y alentador. Tu análisis debe ser perspicaz, constructivo y fácil de entender para estudiantes universitarios. Utiliza formato Markdown para estructurar tu respuesta de forma clara (por ejemplo, usando ## para subtítulos y * para listas)."
+                systemInstruction: "Eres el Profesor Miguelangel Tisera, un consultor de guion experto en películas de marca. Tu tono es académico pero accesible y alentador. Tu análisis debe ser perspicaz, constructivo y fácil de entender para estudiantes universitarios. Utiliza formato HTML para estructurar tu respuesta: usa `<h3>` para los subtítulos 'Análisis' y 'Recomendaciones', y `<ul>` con `<li>` para las listas con viñetas."
             }
         });
         

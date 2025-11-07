@@ -201,8 +201,8 @@ const AiAnalyzer: React.FC = () => {
                 {!isLoading && !error && !analysis && <div className="bg-gray-50 p-6 rounded-lg border border-gray-200"><p className="text-gray-500 text-sm">El análisis de la aplicación experimental del Profesor Miguelangel Tisera aparecerá aquí.</p></div>}
                 {analysis && (
                     <>
-                        <div id="analysis-content-to-pdf" className="bg-white p-6">
-                             <div className="prose prose-sm max-w-none text-gray-700" style={{ whiteSpace: 'pre-wrap' }} dangerouslySetInnerHTML={{ __html: analysis.replace(/\n/g, '<br />').replace(/## (.*?)(<br \/>)/g, '<h3>$1</h3>').replace(/\* (.*?)(<br \/>)/g, '<li>$1</li>') }}></div>
+                        <div id="analysis-content-to-pdf" className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                             <div className="prose prose-sm max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: analysis }}></div>
                         </div>
                         <div className="text-center mt-6">
                             <button
