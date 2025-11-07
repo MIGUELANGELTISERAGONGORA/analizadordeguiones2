@@ -1,17 +1,17 @@
 import { GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.API_KEY;
-
-if (!API_KEY) {
-    throw new Error("API_KEY environment variable is not set");
-}
-
-const ai = new GoogleGenAI({ apiKey: API_KEY });
-
 export const analyzeScriptWithGemini = async (script: string, theoryName: string): Promise<string> => {
-    const prompt = `Actúa como el Profesor Miguelangel Tisera, un analista experto en guiones de cine y películas de marca. Comienza tu análisis con un saludo cordial. Analiza el siguiente guion basándote en la teoría de ${theoryName}. Identifica los puntos clave de la teoría que están presentes o ausentes y proporciona recomendaciones específicas y accionables para mejorar el guion. Estructura tu respuesta con un encabezado principal, una sección de "Análisis" y una sección de "Recomendaciones". El guion es: \n\n${script}`;
+    const API_KEY = process.env.API_KEY;
+
+    if (!API_KEY) {
+        // Return a specific error string instead of throwing, to prevent crashing the app.
+        return "Error de configuración: La clave de API (API_KEY) no está configurada en el entorno de despliegue. La funcionalidad de análisis por IA está desactivada.";
+    }
 
     try {
+        const ai = new GoogleGenAI({ apiKey: API_KEY });
+        const prompt = `Actúa como el Profesor Miguelangel Tisera, un analista experto en guiones de cine y películas de marca. Comienza tu análisis con un saludo cordial. Analiza el siguiente guion basándote en la teoría de ${theoryName}. Identifica los puntos clave de la teoría que están presentes o ausentes y proporciona recomendaciones específicas y accionables para mejorar el guion. Estructura tu respuesta con un encabezado principal, una sección de "Análisis" y una sección de "Recomendaciones". El guion es: \n\n${script}`;
+        
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: [{ parts: [{ text: prompt }] }],
